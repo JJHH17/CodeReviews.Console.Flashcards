@@ -10,6 +10,7 @@ namespace Flashcards.jjhh17
         {
             CreateStack,
             PrintAllStacks,
+            CreateFlashcard,
             Exit,
         }
 
@@ -58,6 +59,27 @@ namespace Flashcards.jjhh17
                                 table.AddRow(stack.StackName, stack.Description);
                             }
                             AnsiConsole.Write(table);
+                        }
+                        Console.WriteLine("Press any key to return to the menu...");
+                        Console.ReadKey();
+                        break;
+
+                    case MenuOptions.CreateFlashcard:
+                        AnsiConsole.MarkupLine("[green]You chose to create a new flashcard![/]");
+                        Console.Write("Enter flashcard front:");
+                        string front = Console.ReadLine();
+                        Console.Write("Enter flashcard back:");
+                        string back = Console.ReadLine();
+                        Console.Write("Enter stack name for the flashcard:");
+                        string stackName = Console.ReadLine();
+                        if (DatabaseConnection.StackExists(stackName))
+                        {
+                            Flashcards newFlashcard = new Flashcards(front, back, stackName);
+                            AnsiConsole.MarkupLine("[green]Flashcard created successfully![/]");
+                        }
+                        else
+                        {
+                            AnsiConsole.MarkupLine("[red]Stack does not exist. Flashcard not created.[/]");
                         }
                         Console.WriteLine("Press any key to return to the menu...");
                         Console.ReadKey();
