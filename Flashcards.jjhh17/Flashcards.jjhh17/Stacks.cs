@@ -1,16 +1,20 @@
 ﻿using System;
 
-public class Stacks
+namespace Flashcards.jjhh17
 {
-	public string StackName { get; set; }
-	public string Description { get; set; }
+    public class Stacks
+    {
+        public string StackName { get; set; }
+        public string Description { get; set; }
 
-    public Stacks(string name, string description)
-	{
-		StackName = name;
-		Description = description;
+        public Stacks(string name, string description)
+        {
+            StackName = name;
+            Description = description;
+            DatabaseConnection.AddStack(name, description);
+        }
+
+        // For Dapper usage
+        public Stacks() { }
     }
-
-	// For Dapper usage
-	public Stacks() { }
 }
