@@ -36,11 +36,20 @@ namespace Flashcards.jjhh17
                         string name = Console.ReadLine();
                         Console.Write("Enter stack description:");
                         string description = Console.ReadLine();
-                        Stacks newStack = new Stacks(name, description);
-                        AnsiConsole.MarkupLine("[green]Stack created successfully![/]");
-                        Console.WriteLine("Press any key to return to the menu...");
-                        Console.ReadKey();
-                        break;
+                        if (!DatabaseConnection.StackExists(name))
+                        {
+                            Stacks newStack = new Stacks(name, description);
+                            AnsiConsole.MarkupLine("[green]Stack created successfully![/]");
+                            Console.WriteLine("Press any key to return to the menu...");
+                            Console.ReadKey();
+                            break;
+                        } else
+                        {
+                            AnsiConsole.MarkupLine("[red]Stack already exists![/]");
+                            AnsiConsole.MarkupLine("Enter any key to continue");
+                            Console.ReadKey();
+                            break;
+                        }
 
                     case MenuOptions.PrintAllStacks:
                         AnsiConsole.MarkupLine("[green]You chose to print all stacks![/]");
