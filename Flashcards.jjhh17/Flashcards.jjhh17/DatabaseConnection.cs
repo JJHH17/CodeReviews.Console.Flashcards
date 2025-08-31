@@ -84,5 +84,16 @@ namespace Flashcards.jjhh17
             connection.Execute(sql, new { Id = id, Front = front, Back = back, StackName = stackName });
             Console.WriteLine($"Flashcard added to stack '{stackName}'.");
         }
+
+        public static List<Flashcards> ReturnFlashcards(string stackName)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                var sql = "SELECT * FROM Flashcards WHERE StackName = @stackName";
+                var cards = connection.Query<Flashcards>(sql, new { stackName }).ToList();
+                return cards;
+            }
+        }
     }
 }
