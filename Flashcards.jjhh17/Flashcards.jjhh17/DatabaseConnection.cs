@@ -16,10 +16,6 @@ namespace Flashcards.jjhh17
         private static readonly string instance = ConfigurationManager.AppSettings["DatabaseName"];
         public static string connectionString = $@"Server=({server})\{instance};Integrated Security=true;";
 
-        public DatabaseConnection()
-        {
-        }
-
         public static void StackTableCreation()
         {
             var connection = new SqlConnection(connectionString);
@@ -32,6 +28,15 @@ namespace Flashcards.jjhh17
                     )";
             connection.Execute(sql);
             Console.WriteLine("Table 'Stacks' created.");
+        }
+
+        public static void AddStack(string name, string description)
+        {
+            var connection = new SqlConnection(connectionString);
+            connection.Open();
+            var sql = "INSERT INTO Stacks (StackName, Description) VALUES (@StackName, @Description)";
+            connection.Execute(sql, new { StackName = name, Description = description });
+            Console.WriteLine($"Stack '{name}' added to the database.");
         }
     }
 }
