@@ -27,7 +27,6 @@ namespace Flashcards.jjhh17
                         Description NVARCHAR(100),
                     )";
             connection.Execute(sql);
-            Console.WriteLine("Table 'Stacks' created.");
         }
 
         public static void AddStack(string name, string description)
@@ -48,6 +47,43 @@ namespace Flashcards.jjhh17
                 var stacks = connection.Query<Stacks>(sql).ToList();
                 return stacks;
             }
+        }
+
+        // Checks if stack exists in database
+        public static bool StackExists(string name)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                var sql = "SELECT COUNT(1) FROM Stacks WHERE StackName = @StackName";
+                int count = connection.ExecuteScalar<int>(sql, new { StackName = name });
+                return count > 0;
+            }
+        }
+
+        public static void FlashcardTableCreation()
+        {
+            var connection = new SqlConnection(connectionString);
+            connection.Open();
+
+            var sql = @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Flashcards' and xtype='U')
+                    CREATE TABLE Flashcards (
+                        Id INT PRIMARY KEY,
+                        Front NVARCHAR(100),
+                        Back NVARCHAR(100),
+                        StackName NVARCHAR(50),
+                        FOREIGN KEY (StackName) REFERENCES Stacks(StackName)
+                    )";
+            connection.Execute(sql);
+        }
+
+        public static void AddFlashcard(long id, string front, string back, string stackName)
+        {
+            var connection = new SqlConnection(connectionString);
+            connection.Open();
+            var sql = "INSERT INTO Flashcards (Id, Front, Back, StackName) VALUES (@id, @front, @back, @stackName)";
+            connection.Execute(sql, new { Id = id, Front = front, Back = back, StackName = stackName });
+            Console.WriteLine($"Flashcard added to stack '{stackName}'.");
         }
     }
 }
