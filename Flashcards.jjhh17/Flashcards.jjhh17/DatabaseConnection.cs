@@ -49,7 +49,6 @@ namespace Flashcards.jjhh17
             }
         }
 
-        // Checks if stack exists in database
         public static bool StackExists(string name)
         {
             using (var connection = new SqlConnection(connectionString))
