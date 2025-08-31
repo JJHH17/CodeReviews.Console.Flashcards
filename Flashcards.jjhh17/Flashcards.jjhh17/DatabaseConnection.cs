@@ -38,5 +38,16 @@ namespace Flashcards.jjhh17
             connection.Execute(sql, new { StackName = name, Description = description });
             Console.WriteLine($"Stack '{name}' added to the database.");
         }
+
+        public static List<Stacks> ReturnAllStacks()
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                var sql = "SELECT * FROM Stacks";
+                var stacks = connection.Query<Stacks>(sql).ToList();
+                return stacks;
+            }
+        }
     }
 }
