@@ -10,6 +10,7 @@ namespace Flashcards.jjhh17
         {
             CreateStack,
             PrintAllStacks,
+            DeleteStack,
             CreateFlashcard,
             PrintFlashcards,
             DeleteFlashcard,
@@ -157,10 +158,44 @@ namespace Flashcards.jjhh17
                         Console.ReadKey();
                         break;
 
-                    case MenuOptions.Exit:
-                                active = false;
-                                break;
+                    case MenuOptions.DeleteStack:
+                        AnsiConsole.MarkupLine("[green]You chose to delete a stack[/]");
+                        // Printing all stacks pre-deletion for ease of use
+                        var deletionStacks = DatabaseConnection.ReturnAllStacks();
+                        if (deletionStacks.Count == 0)
+                        {
+                            AnsiConsole.MarkupLine("[red]No stacks found.[/]");
+                        }
+                        else
+                        {
+                            var table = new Table();
+                            table.AddColumn("Stack Name");
+                            table.AddColumn("Description");
+                            foreach (var stack in deletionStacks)
+                            {
+                                table.AddRow(stack.StackName, stack.Description);
                             }
+                            AnsiConsole.Write(table);
+                        }
+
+                        Console.WriteLine("Enter a stack");
+                        string StackInputDeletion = Console.ReadLine();
+                        if (DatabaseConnection.StackExists(StackInputDeletion))
+                        {
+                            DatabaseConnection.DeleteStack(StackInputDeletion);
+                            AnsiConsole.MarkupLine("[green]Stack and flashcards have been deleted[/]");
+                        } else
+                        {
+                            AnsiConsole.MarkupLine("[red]Stack does not exist[/]");
+                        }
+                        Console.WriteLine("Enter any key to continue");
+                        Console.ReadKey();
+                        break;
+
+                    case MenuOptions.Exit:
+                        active = false;
+                        break;
+                }
             }
         }
     }
