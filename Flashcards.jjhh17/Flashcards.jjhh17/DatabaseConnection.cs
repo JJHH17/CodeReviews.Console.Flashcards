@@ -96,5 +96,26 @@ namespace Flashcards.jjhh17
                 return cards;
             }
         }
+
+        public static bool FlashcardExists(string front)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                var sql = "SELECT COUNT(1) FROM Flashcards WHERE Front = @Front";
+                int count = connection.ExecuteScalar<int>(sql, new { Front = front });
+                return count > 0;
+            }
+        }
+
+        public static void DeleteFlashcard(string front)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                var sql = "DELETE FROM Flashcards WHERE Front = @Front";
+                connection.Execute(sql, new { Front = front });
+            }
+        }
     }
 }
