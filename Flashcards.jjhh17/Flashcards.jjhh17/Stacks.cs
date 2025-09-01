@@ -11,7 +11,15 @@ namespace Flashcards.jjhh17
         {
             StackName = name;
             Description = description;
-            DatabaseConnection.AddStack(name, description);
+
+            if (StackName.Length == 0 || StackName.Length > 50 || Description.Length > 50)
+            {
+                Console.WriteLine("Invalid stack input!");
+            }
+            else
+            {
+                DatabaseConnection.AddStack(name, description);
+            }
         }
 
         // For Dapper usage
