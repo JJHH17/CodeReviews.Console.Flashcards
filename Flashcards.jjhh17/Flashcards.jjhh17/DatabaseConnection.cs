@@ -117,5 +117,29 @@ namespace Flashcards.jjhh17
                 connection.Execute(sql, new { Front = front });
             }
         }
+
+        public static void DeleteStack(string stackName)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                // Flashcard deletion
+                using (var deleteFlashcards = new SqlCommand(
+                    "DELETE FROM Flashcards WHERE Stackname = @StackName", connection))
+                {
+                    deleteFlashcards.Parameters.AddWithValue("StackName", stackName);
+                    deleteFlashcards.ExecuteNonQuery();
+                }
+
+                // Stacks deletion
+                using (var deleteStacks = new SqlCommand(
+                    "DELETE FROM Stacks WHERE StackName = @StackName", connection))
+                {
+                    deleteStacks.Parameters.AddWithValue("@StackName", stackName);
+                    deleteStacks.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }
