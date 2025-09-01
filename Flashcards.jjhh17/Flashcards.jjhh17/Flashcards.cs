@@ -6,7 +6,7 @@ namespace Flashcards.jjhh17
     {
         private static long idCounter = 0;
 
-        private long id { get; set; }
+        public long id { get; set; }
         public string front { get; set; }
         public string back { get; set; }
         public string stackName { get; set; }
