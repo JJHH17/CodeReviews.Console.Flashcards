@@ -31,11 +31,13 @@ namespace Flashcards.jjhh17
 
         public static void AddStack(string name, string description)
         {
-            var connection = new SqlConnection(connectionString);
-            connection.Open();
-            var sql = "INSERT INTO Stacks (StackName, Description) VALUES (@StackName, @Description)";
-            connection.Execute(sql, new { StackName = name, Description = description });
-            Console.WriteLine($"Stack '{name}' added to the database.");
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                var sql = "INSERT INTO Stacks (StackName, Description) VALUES (@StackName, @Description)";
+                connection.Execute(sql, new { StackName = name, Description = description });
+                Console.WriteLine($"Stack '{name}' added to the database.");
+            }
         }
 
         public static List<Stacks> ReturnAllStacks()
@@ -62,10 +64,10 @@ namespace Flashcards.jjhh17
 
         public static void FlashcardTableCreation()
         {
-            var connection = new SqlConnection(connectionString);
-            connection.Open();
-
-            var sql = @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Flashcards' and xtype='U')
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                var sql = @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Flashcards' and xtype='U')
                     CREATE TABLE Flashcards (
                         Id INT IDENTITY(1,1) PRIMARY KEY,
                         Front NVARCHAR(100),
@@ -73,7 +75,8 @@ namespace Flashcards.jjhh17
                         StackName NVARCHAR(50),
                         FOREIGN KEY (StackName) REFERENCES Stacks(StackName)
                     )";
-            connection.Execute(sql);
+                connection.Execute(sql);
+            }
         }
 
         public static void AddFlashcard(string front, string back, string stackName)
