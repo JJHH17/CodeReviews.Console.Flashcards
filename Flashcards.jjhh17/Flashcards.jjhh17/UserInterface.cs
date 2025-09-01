@@ -42,11 +42,10 @@ namespace Flashcards.jjhh17
                         if (!DatabaseConnection.StackExists(name))
                         {
                             Stacks newStack = new Stacks(name, description);
-                            AnsiConsole.MarkupLine("[green]Stack created successfully![/]");
                             Console.WriteLine("Press any key to return to the menu...");
                             Console.ReadKey();
                             break;
-                        } else
+                        } else 
                         {
                             AnsiConsole.MarkupLine("[red]Stack already exists![/]");
                             AnsiConsole.MarkupLine("Enter any key to continue");
@@ -87,7 +86,6 @@ namespace Flashcards.jjhh17
                         if (DatabaseConnection.StackExists(stackName))
                         {
                             Flashcards newFlashcard = new Flashcards(front, back, stackName);
-                            AnsiConsole.MarkupLine("[green]Flashcard created successfully![/]");
                         }
                         else
                         {
