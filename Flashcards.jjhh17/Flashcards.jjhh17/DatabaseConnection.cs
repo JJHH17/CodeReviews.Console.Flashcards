@@ -67,7 +67,7 @@ namespace Flashcards.jjhh17
 
             var sql = @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='Flashcards' and xtype='U')
                     CREATE TABLE Flashcards (
-                        Id INT PRIMARY KEY,
+                        Id INT IDENTITY(1,1) PRIMARY KEY,
                         Front NVARCHAR(100),
                         Back NVARCHAR(100),
                         StackName NVARCHAR(50),
@@ -76,13 +76,13 @@ namespace Flashcards.jjhh17
             connection.Execute(sql);
         }
 
-        public static void AddFlashcard(long id, string front, string back, string stackName)
+        public static void AddFlashcard(string front, string back, string stackName)
         {
-            var sql = "INSERT INTO Flashcards (Id, Front, Back, StackName) VALUES (@Id, @Front, @Back, @StackName)";
+            var sql = "INSERT INTO Flashcards (Front, Back, StackName) VALUES (@Front, @Back, @StackName)";
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                connection.Execute(sql, new { Id = id, Front = front, Back = back, StackName = stackName });
+                connection.Execute(sql, new { Front = front, Back = back, StackName = stackName });
             }
         }
 
