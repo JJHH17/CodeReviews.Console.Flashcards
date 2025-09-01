@@ -10,10 +10,19 @@ namespace Flashcards.jjhh17
 
         public Flashcards(string front, string back, string stackName)
         {
-            this.front = front;
-            this.back = back;
-            this.stackName = stackName;
-            DatabaseConnection.AddFlashcard(front, back, stackName);
+            front = front;
+            back = back;
+            stackName = stackName;
+
+            if (front.Length == 0 || back.Length == 0 || front.Length > 50 || back.Length > 50)
+            {
+                Console.WriteLine("Invalid flashcard input!");
+            }
+            else
+            {
+                DatabaseConnection.AddFlashcard(front, back, stackName);
+                Console.WriteLine("Flashcard created successfully");
+            }
         }
 
         public Flashcards() {}
