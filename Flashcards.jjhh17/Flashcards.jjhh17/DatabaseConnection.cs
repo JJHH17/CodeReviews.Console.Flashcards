@@ -78,11 +78,12 @@ namespace Flashcards.jjhh17
 
         public static void AddFlashcard(long id, string front, string back, string stackName)
         {
-            var connection = new SqlConnection(connectionString);
-            connection.Open();
-            var sql = "INSERT INTO Flashcards (Id, Front, Back, StackName) VALUES (@id, @front, @back, @stackName)";
-            connection.Execute(sql, new { Id = id, Front = front, Back = back, StackName = stackName });
-            Console.WriteLine($"Flashcard added to stack '{stackName}'.");
+            var sql = "INSERT INTO Flashcards (Id, Front, Back, StackName) VALUES (@Id, @Front, @Back, @StackName)";
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                connection.Execute(sql, new { Id = id, Front = front, Back = back, StackName = stackName });
+            }
         }
 
         public static List<Flashcards> ReturnFlashcards(string stackName)
