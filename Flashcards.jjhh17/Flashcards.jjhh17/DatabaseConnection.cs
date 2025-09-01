@@ -81,10 +81,10 @@ namespace Flashcards.jjhh17
 
         public static void AddFlashcard(string front, string back, string stackName)
         {
-            var sql = "INSERT INTO Flashcards (Front, Back, StackName) VALUES (@Front, @Back, @StackName)";
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
+                var sql = "INSERT INTO Flashcards (Front, Back, StackName) VALUES (@Front, @Back, @StackName)";
                 connection.Execute(sql, new { Front = front, Back = back, StackName = stackName });
             }
         }
