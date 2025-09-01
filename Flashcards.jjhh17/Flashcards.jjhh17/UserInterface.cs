@@ -12,6 +12,7 @@ namespace Flashcards.jjhh17
             PrintAllStacks,
             CreateFlashcard,
             PrintFlashcards,
+            DeleteFlashcard,
             Exit,
         }
 
@@ -114,14 +115,52 @@ namespace Flashcards.jjhh17
                         {
                             AnsiConsole.MarkupLine("[red]Stack does not exist[/]");
                         }
-                        Console.WriteLine("Enter any key to return to he menu...");
+                        Console.WriteLine("Enter any key to return to the menu...");
+                        Console.ReadKey();
+                        break;
+
+                    case MenuOptions.DeleteFlashcard:
+                        AnsiConsole.MarkupLine("[green]You chose to delete a flashcard[/]");
+                        Console.WriteLine("Enter a stack");
+                        string stackInput = Console.ReadLine();
+                        if (DatabaseConnection.StackExists(stackInput))
+                        {
+                            var flashcards = DatabaseConnection.ReturnFlashcards(stackInput);
+                            var table = new Table();
+                            table.AddColumn("Flashcard ID");
+                            table.AddColumn("Flashcard front");
+                            table.AddColumn("Flashcard back");
+                            long i = 1;
+                            foreach (var card in flashcards)
+                            {
+                                string index = i.ToString();
+                                table.AddRow(index, card.front, card.back);
+                                i++;
+                            }
+                            AnsiConsole.Write(table);
+                            // Completing the deletion process
+                            Console.WriteLine("Enter the front of the card you wish to delete");
+                            string frontEntry = Console.ReadLine();
+                            if (DatabaseConnection.FlashcardExists(frontEntry))
+                            {
+                                DatabaseConnection.DeleteFlashcard(frontEntry);
+                                AnsiConsole.MarkupLine("[green]Flashcard has been deleted[/]");
+                            } else
+                            {
+                                AnsiConsole.MarkupLine("[red]Flashcard does not exist[/]");
+                            }
+                        } else
+                        {
+                            AnsiConsole.MarkupLine("[red]Stack does not exist[/]");
+                        }
+                        Console.WriteLine("Enter any key to continue");
                         Console.ReadKey();
                         break;
 
                     case MenuOptions.Exit:
-                        active = false;
-                        break;
-                        }
+                                active = false;
+                                break;
+                            }
             }
         }
     }
