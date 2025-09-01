@@ -19,6 +19,7 @@ namespace Flashcards.jjhh17
             else
             {
                 DatabaseConnection.AddStack(name, description);
+                Console.WriteLine("Stack created successfully!");
             }
         }
 
