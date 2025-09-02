@@ -144,5 +144,22 @@ namespace Flashcards.jjhh17
                 }
             }
         }
+
+        public static void StudyAreaTableCreation()
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                var sql = @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name = 'StudyArea' and xtype='U')
+                    CREATE TABLE StudyArea (
+                        id INT IDENTITY(1,1) PRIMARY KEY,
+                        Date NVARCHAR(100),
+                        Score INT,
+                        StackName NVARCHAR(50),
+                        FOREIGN KEY (StackName) REFERENCES Stacks(StackName)
+                        )";
+                connection.Execute(sql);
+            }
+        }
     }
 }
