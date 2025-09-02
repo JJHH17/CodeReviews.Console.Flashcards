@@ -1,11 +1,14 @@
-﻿using System;
+﻿using Spectre.Console;
+using System;
+using Spectre.Console.Cli;
+using Microsoft.Identity.Client.Utils;
 
 namespace Flashcards.jjhh17
 {
     public class StudyArea
     {
         private string Date { get; set; }
-        private int Score { get; set; }
+        public int Score { get; set; }
         private string StackName { get; set; }
 
         public StudyArea(string stackName)
@@ -16,6 +19,11 @@ namespace Flashcards.jjhh17
         }
 
         public StudyArea() { }
+
+        public void IncrementScore()
+        {
+            Score++;
+        }
     }
 }
 
