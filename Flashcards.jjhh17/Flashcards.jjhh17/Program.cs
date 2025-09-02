@@ -10,6 +10,7 @@ class Program
     {
         DatabaseConnection.StackTableCreation();
         DatabaseConnection.FlashcardTableCreation();
+        DatabaseConnection.StudyAreaTableCreation();
         UserInterface.Menu();
     }
 }
