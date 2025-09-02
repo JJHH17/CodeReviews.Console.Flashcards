@@ -1,6 +1,7 @@
 ﻿using Spectre.Console;
 using System;
 using Spectre.Console.Cli;
+using Microsoft.Identity.Client.Utils;
 
 namespace Flashcards.jjhh17
 {
@@ -14,14 +15,15 @@ namespace Flashcards.jjhh17
             CreateFlashcard,
             PrintFlashcards,
             DeleteFlashcard,
+            StudyArea,
             Exit,
         }
 
         public static void Menu()
         {
-            bool active = true;
+            bool mainLoop = true;
 
-            while (active)
+            while (mainLoop)
             {
                 Console.Clear();
                 AnsiConsole.MarkupLine("[blue]Welcome to the flashcard application[/]");
@@ -190,9 +192,106 @@ namespace Flashcards.jjhh17
                         Console.ReadKey();
                         break;
 
-                    case MenuOptions.Exit:
-                        active = false;
+                    case MenuOptions.StudyArea:
+                        AnsiConsole.MarkupLine("[green]You chose the study area[/]");
+                        AnsiConsole.MarkupLine("[green]Opening Study area, press any key to continue...[/]");
+                        Console.ReadKey();
+                        StudyAreaUi();
                         break;
+
+                    case MenuOptions.Exit:
+                        mainLoop = false;
+                        break;
+                }
+            }
+        }
+
+        enum StudyAreaOptions
+        {
+            Study,
+            PrintPreviousSessions,
+            Exit
+        }
+
+        public static void StudyAreaUi()
+        {
+            bool active = true;
+
+            while (active)
+            {
+                var studyChoice = AnsiConsole.Prompt(
+                    new SelectionPrompt<StudyAreaOptions>()
+                    .Title("Select an option:")
+                    .AddChoices(Enum.GetValues<StudyAreaOptions>()));
+
+                switch (studyChoice)
+                {
+                    case StudyAreaOptions.Study:
+                        StudySession();
+                        Console.ReadKey();
+                        break;
+
+                    case StudyAreaOptions.PrintPreviousSessions:
+                        Console.WriteLine("Area coming soon...");
+                        Console.ReadKey();
+                        break;
+
+                    case StudyAreaOptions.Exit:
+                        active = false;
+                        Console.WriteLine("Returning to main menu");
+                        Console.ReadKey();
+                        Menu();
+                        break;
+                }
+            }
+        }
+
+        public static void StudySession()
+        {
+            bool studying = true;
+
+            while (studying)
+            {
+                // Prompt user for a stack to study
+                Console.WriteLine("Enter a stack name to study");
+                string stackStudyInput = Console.ReadLine();
+                StudyArea newStudySession = new StudyArea(stackStudyInput);
+                // Check if stack exists
+                if (DatabaseConnection.StackExists(stackStudyInput))
+                {
+                    // If it exists, fetch a list of front items, present them to user.
+                    AnsiConsole.MarkupLine($"You chose the {stackStudyInput} stack");
+                    var flashcardContainer = DatabaseConnection.ReturnFlashcards(stackStudyInput);
+                    foreach (var card in flashcardContainer)
+                    {
+                        Console.WriteLine($"Question / card front: {card.front}");
+                        Console.WriteLine("Enter the cards answer");
+                        string backInput = Console.ReadLine();
+                        if (backInput.Equals(card.back))
+                        {
+                            Console.WriteLine("Correct!");
+                            newStudySession.IncrementScore();
+                            Console.WriteLine("Enter any key to continue...");
+                            Console.ReadKey();
+                            Console.Clear();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Incorrect!");
+                            Console.WriteLine("Enter any key to continue...");
+                            Console.ReadKey();
+                            Console.Clear();
+                        }
+                    }
+                    Console.WriteLine($"Total Score: {newStudySession.Score}");
+                    // TODO Add study session to database
+                    // TODO End study loop
+                    studying = false;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Stack Name");
+                    studying = false;
                 }
             }
         }
