@@ -8,9 +8,6 @@ class Program
 {
     static void Main(string[] args)
     {
-        DatabaseConnection.StackTableCreation();
-        DatabaseConnection.FlashcardTableCreation();
-        DatabaseConnection.StudyAreaTableCreation();
         UserInterface.Menu();
     }
 }
