@@ -10,6 +10,7 @@ namespace Flashcards.jjhh17
         public string Date { get; set; }
         public int Score { get; set; }
         public string StackName { get; set; }
+        private int IncrementValue = 1;
 
         public StudyArea(string stackName)
         {
@@ -22,7 +23,7 @@ namespace Flashcards.jjhh17
 
         public void IncrementScore()
         {
-            Score++;
+            Score += IncrementValue;
         }
     }
 }
