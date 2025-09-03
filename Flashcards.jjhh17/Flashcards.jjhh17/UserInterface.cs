@@ -285,7 +285,7 @@ namespace Flashcards.jjhh17
                     }
                     Console.WriteLine($"Total Score: {newStudySession.Score}");
                     // TODO Add study session to database
-                    // TODO End study loop
+                    DatabaseConnection.AddStudySession(newStudySession.Date, newStudySession.Score, stackStudyInput);
                     studying = false;
                 }
                 else
