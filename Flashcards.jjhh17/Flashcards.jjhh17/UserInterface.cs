@@ -252,14 +252,31 @@ namespace Flashcards.jjhh17
 
             while (studying)
             {
-                // Prompt user for a stack to study
+                // Prints a list of stacks for the user to choose from
+                var studyStacks = DatabaseConnection.ReturnAllStacks();
+                if (studyStacks.Count == 0)
+                {
+                    AnsiConsole.MarkupLine("[red]No stacks found.[/]");
+                }
+                else
+                {
+                    var table = new Table();
+                    table.AddColumn("Stack Name");
+                    table.AddColumn("Description");
+                    foreach (var stack in studyStacks)
+                    {
+                        table.AddRow(stack.StackName, stack.Description);
+                    }
+                    AnsiConsole.Write(table);
+                }
+
+                // Prompting to enter a stack name
                 Console.WriteLine("Enter a stack name to study");
                 string stackStudyInput = Console.ReadLine();
                 StudyArea newStudySession = new StudyArea(stackStudyInput);
-                // Check if stack exists
+
                 if (DatabaseConnection.StackExists(stackStudyInput))
                 {
-                    // If it exists, fetch a list of front items, present them to user.
                     AnsiConsole.MarkupLine($"You chose the {stackStudyInput} stack");
                     var flashcardContainer = DatabaseConnection.ReturnFlashcards(stackStudyInput);
                     foreach (var card in flashcardContainer)
@@ -284,7 +301,7 @@ namespace Flashcards.jjhh17
                         }
                     }
                     Console.WriteLine($"Total Score: {newStudySession.Score}");
-                    // TODO Add study session to database
+
                     DatabaseConnection.AddStudySession(newStudySession.Date, newStudySession.Score, stackStudyInput);
                     studying = false;
                 }
