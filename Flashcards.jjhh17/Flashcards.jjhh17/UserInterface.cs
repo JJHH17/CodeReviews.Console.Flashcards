@@ -45,6 +45,7 @@ namespace Flashcards.jjhh17
                         string name = Console.ReadLine();
                         Console.Write("Enter stack description:");
                         string description = Console.ReadLine();
+
                         if (!DatabaseConnection.StackExists(name))
                         {
                             Stacks newStack = new Stacks(name, description);
@@ -62,6 +63,7 @@ namespace Flashcards.jjhh17
                     case MenuOptions.PrintAllStacks:
                         AnsiConsole.MarkupLine("[green]You chose to print all stacks![/]");
                         var stacks = DatabaseConnection.ReturnAllStacks();
+
                         if (stacks.Count == 0)
                         {
                             AnsiConsole.MarkupLine("[red]No stacks found.[/]");
