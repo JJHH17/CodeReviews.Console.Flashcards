@@ -161,5 +161,15 @@ namespace Flashcards.jjhh17
                 connection.Execute(sql);
             }
         }
+
+        public static void AddStudySession(string date, int score, string stackName)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                var sql = "INSERT INTO StudyArea (Date, Score, StackName) VALUES (@Date, @Score, @StackName)";
+                connection.Execute(sql, new { Date = date, score = score, StackName = stackName });
+            }
+        }
     }
 }
