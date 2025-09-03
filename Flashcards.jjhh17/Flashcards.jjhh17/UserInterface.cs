@@ -215,6 +215,7 @@ namespace Flashcards.jjhh17
 
         public static void StudyAreaUi()
         {
+            Console.Clear();
             bool active = true;
 
             while (active)
@@ -232,7 +233,7 @@ namespace Flashcards.jjhh17
                         break;
 
                     case StudyAreaOptions.PrintPreviousSessions:
-                        Console.WriteLine("Area coming soon...");
+                        PrintPreviousStudies();
                         Console.ReadKey();
                         break;
 
@@ -310,6 +311,62 @@ namespace Flashcards.jjhh17
                     Console.WriteLine("Invalid Stack Name");
                     studying = false;
                 }
+            }
+        }
+
+        public static void PrintPreviousStudies()
+        {
+            // Printing a list of stacks for ease of use
+            var studyStacks = DatabaseConnection.ReturnAllStacks();
+            if (studyStacks.Count == 0)
+            {
+                AnsiConsole.MarkupLine("[red]No stacks found.[/]");
+            }
+            else
+            {
+                var table = new Table();
+                table.AddColumn("Stack Name");
+                table.AddColumn("Description");
+                foreach (var stack in studyStacks)
+                {
+                    table.AddRow(stack.StackName, stack.Description);
+                }
+                AnsiConsole.Write(table);
+            }
+
+            // Prompting user for stack entry
+            Console.WriteLine("Enter a Stack to view your previous study sessions in it");
+            string stackInput = Console.ReadLine();
+            if (DatabaseConnection.StackExists(stackInput))
+            {
+                Console.WriteLine($"Previous study sessions for the {stackInput} stack");
+                var previousSessions = DatabaseConnection.ReturnStudySessions(stackInput);
+                if (previousSessions.Count == 0)
+                {
+                    AnsiConsole.MarkupLine("[red]No sessions found.[/]");
+                }
+                else
+                {
+                    var table = new Table();
+                    table.AddColumn("Date of sessions");
+                    table.AddColumn("Session score");
+                    foreach (var session in previousSessions)
+                    {
+                        table.AddRow(session.Date, session.Score.ToString());
+                    }
+                    AnsiConsole.Write(table);
+
+                    Console.WriteLine("Enter any key to continue");
+                    Console.ReadKey();
+                    StudyAreaUi();
+                }
+            }
+            else
+            {
+                Console.WriteLine("Stack doesn't exist!");
+                Console.WriteLine("Enter any key to continue...");
+                Console.ReadKey();
+                StudyAreaUi();
             }
         }
     }
