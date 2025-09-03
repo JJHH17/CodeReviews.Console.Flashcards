@@ -7,6 +7,7 @@ namespace Flashcards.jjhh17
 {
     public class UserInterface
     {
+
         enum MenuOptions
         {
             CreateStack,
@@ -241,7 +242,7 @@ namespace Flashcards.jjhh17
                         active = false;
                         Console.WriteLine("Returning to main menu");
                         Console.ReadKey();
-                        Menu();
+                        active = false;
                         break;
                 }
             }
@@ -358,7 +359,6 @@ namespace Flashcards.jjhh17
 
                     Console.WriteLine("Enter any key to continue");
                     Console.ReadKey();
-                    StudyAreaUi();
                 }
             }
             else
@@ -366,7 +366,6 @@ namespace Flashcards.jjhh17
                 Console.WriteLine("Stack doesn't exist!");
                 Console.WriteLine("Enter any key to continue...");
                 Console.ReadKey();
-                StudyAreaUi();
             }
         }
     }
