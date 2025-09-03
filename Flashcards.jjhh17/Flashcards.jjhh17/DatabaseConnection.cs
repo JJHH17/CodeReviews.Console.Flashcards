@@ -127,6 +127,14 @@ namespace Flashcards.jjhh17
             {
                 connection.Open();
 
+                // Study session deletion
+                using (var deleteStudySession = new SqlCommand(
+                    "DELETE FROM StudyArea WHERE StackName = @StackName", connection))
+                {
+                    deleteStudySession.Parameters.AddWithValue("@StackName", stackName);
+                    deleteStudySession.ExecuteNonQuery();
+                }
+
                 // Flashcard deletion
                 using (var deleteFlashcards = new SqlCommand(
                     "DELETE FROM Flashcards WHERE Stackname = @StackName", connection))
