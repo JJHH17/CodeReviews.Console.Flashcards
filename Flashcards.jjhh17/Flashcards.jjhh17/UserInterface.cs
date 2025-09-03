@@ -22,6 +22,9 @@ namespace Flashcards.jjhh17
 
         public static void Menu()
         {
+            DatabaseConnection.StackTableCreation();
+            DatabaseConnection.FlashcardTableCreation();
+            DatabaseConnection.StudyAreaTableCreation();
             bool mainLoop = true;
 
             while (mainLoop)
@@ -221,6 +224,7 @@ namespace Flashcards.jjhh17
 
             while (active)
             {
+                Console.Clear();
                 var studyChoice = AnsiConsole.Prompt(
                     new SelectionPrompt<StudyAreaOptions>()
                     .Title("Select an option:")
