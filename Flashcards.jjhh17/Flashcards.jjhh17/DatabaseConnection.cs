@@ -171,5 +171,16 @@ namespace Flashcards.jjhh17
                 connection.Execute(sql, new { Date = date, score = score, StackName = stackName });
             }
         }
+
+        public static List<StudyArea> ReturnStudySessions(string stackName)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                var sql = "SELECT * FROM StudyArea WHERE StackName = @stackName";
+                var sessions = connection.Query<StudyArea>(sql, new { stackName }).ToList();
+                return sessions;
+            }
+        }
     }
 }
